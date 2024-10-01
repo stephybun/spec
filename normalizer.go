@@ -87,7 +87,7 @@ func normalizeURI(refPath, base string) string {
 func denormalizeRef(ref *Ref, originalRelativeBase, id string) Ref {
 	debugLog("denormalizeRef called:\n$ref: %q\noriginal: %s\nroot ID:%s", ref.String(), originalRelativeBase, id)
 
-	if ref.String() == "" || ref.IsRoot() || ref.HasFragmentOnly {
+	if ref.String() == "" || ref.IsRoot() || ref.HasOnlyFragment() {
 		// short circuit: $ref to current doc
 		return *ref
 	}
