@@ -80,7 +80,7 @@ type schemaLoader struct {
 }
 
 func (r *schemaLoader) transitiveResolver(basePath string, ref Ref) *schemaLoader {
-	if ref.IsRoot() || ref.HasFragmentOnly {
+	if ref.IsRoot() || ref.HasOnlyFragment() {
 		return r
 	}
 
@@ -132,13 +132,13 @@ func (r *schemaLoader) resolveRef(ref *Ref, target interface{}, basePath string)
 	// Resolve against the root if it isn't nil, and if ref is pointing at the root, or has a fragment only which means
 	// it is pointing somewhere in the root.
 	root := r.root
-	if (ref.IsRoot() || ref.HasFragmentOnly) && root == nil && basePath != "" {
+	if (ref.IsRoot() || ref.HasOnlyFragment()) && root == nil && basePath != "" {
 		if baseRef, erb := NewRef(basePath); erb == nil {
 			root, _, _, _ = r.load(baseRef.GetURL())
 		}
 	}
 
-	if (ref.IsRoot() || ref.HasFragmentOnly) && root != nil {
+	if (ref.IsRoot() || ref.HasOnlyFragment()) && root != nil {
 		data = root
 	} else {
 		baseRef := normalizeRef(ref, basePath)
